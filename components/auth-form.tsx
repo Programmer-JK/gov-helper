@@ -4,6 +4,14 @@ import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Eye, EyeOff, Loader2, CheckCircle, XCircle } from "lucide-react";
+import {
+  validateEmail,
+  validateName,
+  validateBusinessNumber,
+  validatePhone,
+  validatePassword,
+  validateConfirmPassword,
+} from "@/util/function/validation";
 
 interface ValidationErrors {
   email?: string;
@@ -50,7 +58,7 @@ export default function AuthForm() {
         const paddingTop = parseFloat(computedStyle.paddingTop);
         const paddingBottom = parseFloat(computedStyle.paddingBottom);
         const contentHeight = formElement.scrollHeight;
-        const totalHeight = contentHeight + paddingTop + paddingBottom;
+        const totalHeight = contentHeight + paddingTop + paddingBottom + 50;
         setFormHeight(totalHeight);
       } else if (activeTab === "signup" && signupFormRef.current) {
         // 패딩을 포함한 전체 높이 계산
@@ -59,7 +67,7 @@ export default function AuthForm() {
         const paddingTop = parseFloat(computedStyle.paddingTop);
         const paddingBottom = parseFloat(computedStyle.paddingBottom);
         const contentHeight = formElement.scrollHeight;
-        const totalHeight = contentHeight + paddingTop + paddingBottom;
+        const totalHeight = contentHeight + paddingTop + paddingBottom + 50;
         setFormHeight(totalHeight);
       }
     };
@@ -76,52 +84,6 @@ export default function AuthForm() {
     };
   }, [activeTab, errors, businessNumber, companyName, isLoadingCompany]);
 
-  // Validation functions
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email) return "이메일을 입력해주세요";
-    if (!emailRegex.test(email)) return "올바른 이메일 형식이 아닙니다";
-    return "";
-  };
-
-  const validateName = (name: string) => {
-    if (!name) return "이름을 입력해주세요";
-    if (name.length < 2) return "이름은 2글자 이상이어야 합니다";
-    return "";
-  };
-
-  const validateBusinessNumber = (number: string) => {
-    if (!number) return "사업자번호를 입력해주세요";
-    if (number.length !== 10) return "사업자번호는 10자리여야 합니다";
-    return "";
-  };
-
-  const validatePhone = (phone: string) => {
-    const phoneRegex = /^01[0-9]-?[0-9]{4}-?[0-9]{4}$/;
-    if (!phone) return "전화번호를 입력해주세요";
-    if (!phoneRegex.test(phone.replace(/-/g, "")))
-      return "올바른 전화번호 형식이 아닙니다";
-    return "";
-  };
-
-  const validatePassword = (password: string) => {
-    if (!password) return "비밀번호를 입력해주세요";
-    if (password.length < 8) return "비밀번호는 8자리 이상이어야 합니다";
-    if (!/(?=.*[a-zA-Z])(?=.*[0-9])/.test(password))
-      return "영문과 숫자를 포함해야 합니다";
-    return "";
-  };
-
-  const validateConfirmPassword = (
-    password: string,
-    confirmPassword: string
-  ) => {
-    if (!confirmPassword) return "비밀번호 확인을 입력해주세요";
-    if (password !== confirmPassword) return "비밀번호가 일치하지 않습니다";
-    return "";
-  };
-
-  // Real-time validation
   useEffect(() => {
     const newErrors: ValidationErrors = {};
 
@@ -156,7 +118,7 @@ export default function AuthForm() {
             Accept: "application/json",
           },
           body: JSON.stringify({
-            b_no: [businessNum], // 배열로 전송 (API 스펙에 따라)
+            b_no: [businessNum],
           }),
         }
       );
@@ -166,20 +128,14 @@ export default function AuthForm() {
       }
 
       const data = await response.json();
-      console.log(data);
-
-      // 원본 jQuery 코드의 로직 그대로 구현
       if (data.match_cnt === "1") {
-        // 성공
-        console.log("success");
-        return { success: true, data: data };
+        setCompanyName("등록된 사업자번호");
+        setTouched({ ...touched, businessNumber: true });
+        setIsLoadingCompany(false);
       } else {
-        // 실패
-        console.log("fail");
-        if (data.data && data.data[0] && data.data[0].tax_type) {
-          alert(data.data[0].tax_type);
-        }
-        return { success: false, data: data };
+        setCompanyName("등록되지 않은 사업자번호");
+        setTouched({ ...touched, businessNumber: false });
+        setIsLoadingCompany(false);
       }
     } catch (error) {
       console.log("error");
@@ -355,7 +311,7 @@ export default function AuthForm() {
                     animate="visible"
                     exit="exit"
                     layout
-                    onAnimationComplete={() => {
+                    onAnimationStart={() => {
                       // 애니메이션 완료 후 높이 재측정
                       if (signinFormRef.current) {
                         const formElement = signinFormRef.current;
@@ -367,7 +323,7 @@ export default function AuthForm() {
                         );
                         const contentHeight = formElement.scrollHeight;
                         const totalHeight =
-                          contentHeight + paddingTop + paddingBottom;
+                          contentHeight + paddingTop + paddingBottom + 50;
                         setFormHeight(totalHeight);
                       }
                     }}
@@ -389,10 +345,6 @@ export default function AuthForm() {
                           handleInputChange("email", e.target.value)
                         }
                         onBlur={() => handleBlur("email")}
-                        whileFocus={{
-                          scale: 1.02,
-                          boxShadow: "0 0 0 3px rgba(10, 209, 200, 0.1)",
-                        }}
                       />
                       <AnimatePresence>
                         {errors.email && touched.email && (
@@ -430,10 +382,6 @@ export default function AuthForm() {
                             handleInputChange("password", e.target.value)
                           }
                           onBlur={() => handleBlur("password")}
-                          whileFocus={{
-                            scale: 1.02,
-                            boxShadow: "0 0 0 3px rgba(10, 209, 200, 0.1)",
-                          }}
                         />
                         <motion.button
                           type="button"
@@ -487,23 +435,11 @@ export default function AuthForm() {
                       type="submit"
                       className="w-full bg-gradient-to-r from-primary-600 to-primary-300 text-white py-3 px-4 rounded-lg font-semibold hover:from-primary-700 hover:to-primary-400 transition-all duration-300"
                       variants={itemVariants}
-                      whileHover={{
-                        scale: 1.02,
-                        boxShadow: "0 10px 25px rgba(10, 209, 200, 0.3)",
-                      }}
+                      whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
                       로그인
                     </motion.button>
-                    <motion.div className="text-center" variants={itemVariants}>
-                      <motion.a
-                        href="#"
-                        className="text-sm text-primary-600 hover:text-primary-800 transition-colors duration-300"
-                        whileHover={{ scale: 1.05 }}
-                      >
-                        비밀번호를 잊으셨나요?
-                      </motion.a>
-                    </motion.div>
                   </motion.form>
                 ) : (
                   <motion.form
@@ -515,7 +451,7 @@ export default function AuthForm() {
                     animate="visible"
                     exit="exit"
                     layout
-                    onAnimationComplete={() => {
+                    onAnimationStart={() => {
                       // 애니메이션 완료 후 높이 재측정
                       if (signupFormRef.current) {
                         const formElement = signupFormRef.current;
@@ -527,7 +463,7 @@ export default function AuthForm() {
                         );
                         const contentHeight = formElement.scrollHeight;
                         const totalHeight =
-                          contentHeight + paddingTop + paddingBottom;
+                          contentHeight + paddingTop + paddingBottom + 50;
                         setFormHeight(totalHeight);
                       }
                     }}
@@ -550,10 +486,6 @@ export default function AuthForm() {
                             handleInputChange("email", e.target.value)
                           }
                           onBlur={() => handleBlur("email")}
-                          whileFocus={{
-                            scale: 1.02,
-                            boxShadow: "0 0 0 3px rgba(10, 209, 200, 0.1)",
-                          }}
                         />
                         {touched.email && !errors.email && formData.email && (
                           <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-500" />
@@ -591,10 +523,6 @@ export default function AuthForm() {
                             handleInputChange("name", e.target.value)
                           }
                           onBlur={() => handleBlur("name")}
-                          whileFocus={{
-                            scale: 1.02,
-                            boxShadow: "0 0 0 3px rgba(10, 209, 200, 0.1)",
-                          }}
                         />
                         {touched.name && !errors.name && formData.name && (
                           <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-500" />
@@ -633,10 +561,6 @@ export default function AuthForm() {
                             "businessNumber",
                             !!errors.businessNumber
                           )}
-                          whileFocus={{
-                            scale: 1.02,
-                            boxShadow: "0 0 0 3px rgba(10, 209, 200, 0.1)",
-                          }}
                         />
                         {touched.businessNumber &&
                           !errors.businessNumber &&
@@ -687,7 +611,7 @@ export default function AuthForm() {
                             ) : companyName ? (
                               <motion.span
                                 className={
-                                  companyName.includes("등록되지 않은")
+                                  touched.businessNumber
                                     ? "text-red-500"
                                     : "text-primary-600"
                                 }
@@ -721,10 +645,6 @@ export default function AuthForm() {
                             handleInputChange("phone", e.target.value)
                           }
                           onBlur={() => handleBlur("phone")}
-                          whileFocus={{
-                            scale: 1.02,
-                            boxShadow: "0 0 0 3px rgba(10, 209, 200, 0.1)",
-                          }}
                         />
                         {touched.phone && !errors.phone && formData.phone && (
                           <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-primary-500" />
@@ -766,10 +686,6 @@ export default function AuthForm() {
                             handleInputChange("password", e.target.value)
                           }
                           onBlur={() => handleBlur("password")}
-                          whileFocus={{
-                            scale: 1.02,
-                            boxShadow: "0 0 0 3px rgba(10, 209, 200, 0.1)",
-                          }}
                         />
                         <motion.button
                           type="button"
@@ -821,10 +737,6 @@ export default function AuthForm() {
                             handleInputChange("confirmPassword", e.target.value)
                           }
                           onBlur={() => handleBlur("confirmPassword")}
-                          whileFocus={{
-                            scale: 1.02,
-                            boxShadow: "0 0 0 3px rgba(10, 209, 200, 0.1)",
-                          }}
                         />
                         <motion.button
                           type="button"
@@ -913,10 +825,7 @@ export default function AuthForm() {
                       type="submit"
                       className="w-full bg-gradient-to-r from-primary-400 to-primary-200 text-white py-3 px-4 rounded-lg font-semibold hover:from-primary-500 hover:to-primary-300 transition-all duration-300"
                       variants={itemVariants}
-                      whileHover={{
-                        scale: 1.02,
-                        boxShadow: "0 10px 25px rgba(20, 145, 155, 0.3)",
-                      }}
+                      whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
                     >
                       회원가입
