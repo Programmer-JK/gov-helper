@@ -5,11 +5,11 @@ import jwt from "jsonwebtoken";
 const DUMMY_USERS = [
   {
     userIdx: "user_1",
-    email: "admin@runique.com",
-    password: "Admin123!", // 실제로는 해시된 비밀번호
-    name: "관리자",
-    companyNum: "admin",
-    companyName: "루니크",
+    email: "admin@govhelper.com",
+    password: "Admin123!",
+    name: "쿠루루",
+    companyNum: "1234567890",
+    companyName: "야스쿠치",
     phone: "010-1234-5678",
   },
 ];

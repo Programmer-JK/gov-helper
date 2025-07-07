@@ -1,20 +1,27 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { ChevronLeft, ChevronRight, Building2, Users, FileCheck, Headphones } from "lucide-react"
-import AuthForm from "@/components/auth-form"
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Building2,
+  Users,
+  FileCheck,
+  Headphones,
+} from "lucide-react";
+import AuthForm from "@/components/auth-form";
 
 export default function HomePage() {
-  const [currentSlide, setCurrentSlide] = useState(0)
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   const nextSlide = () => {
-    setCurrentSlide(1)
-  }
+    setCurrentSlide(1);
+  };
 
   const prevSlide = () => {
-    setCurrentSlide(0)
-  }
+    setCurrentSlide(0);
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -25,25 +32,25 @@ export default function HomePage() {
         staggerChildren: 0.2,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.6, ease: "easeOut" },
+      transition: { duration: 0.6 },
     },
-  }
+  };
 
   const featureVariants = {
     hidden: { opacity: 0, x: -30 },
     visible: {
       opacity: 1,
       x: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { duration: 0.5 },
     },
-  }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
@@ -66,7 +73,11 @@ export default function HomePage() {
                 "linear-gradient(45deg, rgba(10, 209, 200, 0.2), rgba(69, 223, 177, 0.2))",
               ],
             }}
-            transition={{ duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+            transition={{
+              duration: 8,
+              repeat: Number.POSITIVE_INFINITY,
+              ease: "linear",
+            }}
           />
 
           <div className="relative z-10 max-w-lg text-white">
@@ -78,13 +89,20 @@ export default function HomePage() {
               >
                 <motion.span
                   animate={{ rotate: [0, 10, -10, 0] }}
-                  transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3 }}
+                  transition={{
+                    duration: 2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    repeatDelay: 3,
+                  }}
                 >
                   🏛️
                 </motion.span>
                 정부 헬퍼
               </motion.h1>
-              <motion.p className="text-xl text-primary-100 mb-8" variants={itemVariants}>
+              <motion.p
+                className="text-xl text-primary-100 mb-8"
+                variants={itemVariants}
+              >
                 정부지원사업과 고객사를
                 <br />
                 스마트하게 매칭해드립니다
@@ -103,8 +121,16 @@ export default function HomePage() {
                   title: "간편한 온라인 신청 프로세스",
                   desc: "복잡한 서류 작업을 간소화하여 쉽게 신청하세요",
                 },
-                { icon: Users, title: "실시간 진행 상황 확인", desc: "신청부터 승인까지 모든 과정을 투명하게 확인" },
-                { icon: Headphones, title: "전문가 상담 서비스", desc: "정부지원사업 전문가가 1:1로 상담해드립니다" },
+                {
+                  icon: Users,
+                  title: "실시간 진행 상황 확인",
+                  desc: "신청부터 승인까지 모든 과정을 투명하게 확인",
+                },
+                {
+                  icon: Headphones,
+                  title: "전문가 상담 서비스",
+                  desc: "정부지원사업 전문가가 1:1로 상담해드립니다",
+                },
               ].map((feature, index) => (
                 <motion.div
                   key={index}
@@ -153,7 +179,7 @@ export default function HomePage() {
               initial={{ opacity: 0, x: -100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              transition={{ duration: 0.5 }}
             >
               <div className="absolute inset-0 bg-black/20"></div>
               <motion.div
@@ -164,7 +190,11 @@ export default function HomePage() {
                     "linear-gradient(45deg, rgba(69, 223, 177, 0.2), rgba(10, 209, 200, 0.2))",
                   ],
                 }}
-                transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
+                transition={{
+                  duration: 4,
+                  repeat: Number.POSITIVE_INFINITY,
+                  ease: "linear",
+                }}
               />
 
               <motion.div
@@ -173,25 +203,41 @@ export default function HomePage() {
                 initial="hidden"
                 animate="visible"
               >
-                <motion.div className="text-center mb-12" variants={itemVariants}>
-                  <motion.h1 className="text-3xl font-bold mb-4" whileHover={{ scale: 1.05 }}>
+                <motion.div
+                  className="text-center mb-12"
+                  variants={itemVariants}
+                >
+                  <motion.h1
+                    className="text-3xl font-bold mb-4"
+                    whileHover={{ scale: 1.05 }}
+                  >
                     <motion.span
                       animate={{ rotate: [0, 10, -10, 0] }}
-                      transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY, repeatDelay: 3 }}
+                      transition={{
+                        duration: 2,
+                        repeat: Number.POSITIVE_INFINITY,
+                        repeatDelay: 3,
+                      }}
                       className="inline-block"
                     >
                       🏛️
                     </motion.span>{" "}
                     정부 헬퍼
                   </motion.h1>
-                  <motion.p className="text-lg text-primary-100 mb-8" variants={itemVariants}>
+                  <motion.p
+                    className="text-lg text-primary-100 mb-8"
+                    variants={itemVariants}
+                  >
                     정부지원사업과 고객사를
                     <br />
                     스마트하게 매칭해드립니다
                   </motion.p>
                 </motion.div>
 
-                <motion.div className="space-y-6 mb-12" variants={containerVariants}>
+                <motion.div
+                  className="space-y-6 mb-12"
+                  variants={containerVariants}
+                >
                   {[
                     {
                       icon: Building2,
@@ -231,7 +277,9 @@ export default function HomePage() {
                       </motion.div>
                       <div>
                         <h3 className="font-semibold mb-1">{feature.title}</h3>
-                        <p className="text-primary-100 text-sm">{feature.desc}</p>
+                        <p className="text-primary-100 text-sm">
+                          {feature.desc}
+                        </p>
                       </div>
                     </motion.div>
                   ))}
@@ -241,13 +289,19 @@ export default function HomePage() {
                   <motion.button
                     onClick={nextSlide}
                     className="bg-white/20 hover:bg-white/30 backdrop-blur-sm px-8 py-3 rounded-full font-semibold transition-all duration-300 flex items-center gap-2 mx-auto"
-                    whileHover={{ scale: 1.05, backgroundColor: "rgba(255, 255, 255, 0.3)" }}
+                    whileHover={{
+                      scale: 1.05,
+                      backgroundColor: "rgba(255, 255, 255, 0.3)",
+                    }}
                     whileTap={{ scale: 0.95 }}
                   >
                     시작하기
                     <motion.div
                       animate={{ x: [0, 5, 0] }}
-                      transition={{ duration: 1.5, repeat: Number.POSITIVE_INFINITY }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Number.POSITIVE_INFINITY,
+                      }}
                     >
                       <ChevronRight className="w-5 h-5" />
                     </motion.div>
@@ -262,12 +316,15 @@ export default function HomePage() {
               initial={{ opacity: 0, x: 100 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 100 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              transition={{ duration: 0.5 }}
             >
               <motion.button
                 onClick={prevSlide}
                 className="absolute top-6 left-6 z-10 bg-white/80 hover:bg-white backdrop-blur-sm p-2 rounded-full transition-all duration-300"
-                whileHover={{ scale: 1.1, backgroundColor: "rgba(255, 255, 255, 1)" }}
+                whileHover={{
+                  scale: 1.1,
+                  backgroundColor: "rgba(255, 255, 255, 1)",
+                }}
                 whileTap={{ scale: 0.9 }}
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -293,5 +350,5 @@ export default function HomePage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
