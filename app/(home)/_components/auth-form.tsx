@@ -2,37 +2,20 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import SignInForm from "./auth/signin-form";
-import SignUpForm from "./auth/signup-form";
+import SignInForm from "./signin-form";
+import SignUpForm from "./signup-form";
 
 export default function AuthForm() {
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
   const [formHeight, setFormHeight] = useState<number>(0);
 
   // Refs for measuring form heights
-  const signinFormRef = useRef<HTMLFormElement>(null);
-  const signupFormRef = useRef<HTMLFormElement>(null);
+  const formRef = useRef<HTMLDivElement>(null);
 
   // Measure form heights and set initial height
   useEffect(() => {
     const measureHeight = () => {
-      if (activeTab === "signin" && signinFormRef.current) {
-        const formElement = signinFormRef.current;
-        const computedStyle = window.getComputedStyle(formElement);
-        const paddingTop = parseFloat(computedStyle.paddingTop);
-        const paddingBottom = parseFloat(computedStyle.paddingBottom);
-        const contentHeight = formElement.scrollHeight;
-        const totalHeight = contentHeight + paddingTop + paddingBottom + 150;
-        setFormHeight(totalHeight);
-      } else if (activeTab === "signup" && signupFormRef.current) {
-        const formElement = signupFormRef.current;
-        const computedStyle = window.getComputedStyle(formElement);
-        const paddingTop = parseFloat(computedStyle.paddingTop);
-        const paddingBottom = parseFloat(computedStyle.paddingBottom);
-        const contentHeight = formElement.scrollHeight;
-        const totalHeight = contentHeight + paddingTop + paddingBottom + 150;
-        setFormHeight(totalHeight);
-      }
+      setFormHeight(formRef.current?.scrollHeight || 0);
     };
 
     const frameId = requestAnimationFrame(() => {
@@ -126,19 +109,24 @@ export default function AuthForm() {
           }}
           layout
         >
-          <div className="p-8">
+          <div
+            className="p-8"
+            ref={(ref) => {
+              formRef.current = ref;
+            }}
+          >
             <div className="relative">
               <AnimatePresence mode="wait" initial={false}>
                 {activeTab === "signin" ? (
                   <SignInForm
-                    onFormRef={(ref) => {
-                      signinFormRef.current = ref;
+                    checkHeight={() => {
+                      setFormHeight(formRef.current?.scrollHeight || 0);
                     }}
                   />
                 ) : (
                   <SignUpForm
-                    onFormRef={(ref) => {
-                      signupFormRef.current = ref;
+                    checkHeight={() => {
+                      setFormHeight(formRef.current?.scrollHeight || 0);
                     }}
                   />
                 )}

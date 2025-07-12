@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -25,6 +25,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useAuthStore } from "@/store/authStore";
+import { useRouter } from "next/navigation";
 
 interface Company {
   id: string;
@@ -45,9 +47,24 @@ interface MatchingResult {
 }
 
 export default function MainPage() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [matchingResults, setMatchingResults] = useState<MatchingResult[]>([]);
   const [showResults, setShowResults] = useState(false);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    // 로그인 상태 확인
+    const { isAuthenticated } = useAuthStore.getState();
+    if (!isAuthenticated) {
+      router.push("/");
+      return;
+    }
+    setIsLoggedIn(true);
+    setIsLoading(false);
+  }, [router]);
 
   // Mock matching results
   const mockResults: MatchingResult[] = [
@@ -166,6 +183,14 @@ export default function MainPage() {
     (r) => r.matchingRate >= 50 && r.matchingRate < 80
   ).length;
   const lowMatching = matchingResults.filter((r) => r.matchingRate < 50).length;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen w-[75rem]">
+        <div className="container py-8 w-full">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100">

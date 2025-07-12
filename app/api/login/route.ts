@@ -52,7 +52,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           success: false,
-          errorCode: "USER_003",
+          errorCode: "USER_001",
         },
         { status: 400 }
       );

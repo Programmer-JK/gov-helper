@@ -10,7 +10,7 @@ import {
   FileCheck,
   Headphones,
 } from "lucide-react";
-import AuthForm from "@/components/auth-form";
+import AuthForm from "@/app/(home)/_components/auth-form";
 
 export default function HomePage() {
   const [currentSlide, setCurrentSlide] = useState(0);
