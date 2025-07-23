@@ -193,10 +193,10 @@ export default function MainPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100">
+    <div className="min-h-screen bg-gradient-to-br from-primary-50 to-primary-100 flex flex-col items-center">
       {/* Header */}
       <motion.div
-        className="bg-gradient-to-r from-primary-600 to-primary-300 text-white py-12"
+        className="w-full bg-gradient-to-r from-primary-600 to-primary-300 text-white py-12"
         initial={{ opacity: 0, y: -50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
@@ -214,7 +214,7 @@ export default function MainPage() {
         </div>
       </motion.div>
 
-      <div className="container mx-auto px-6 py-8 space-y-8">
+      <div className="max-w-[60rem] px-6 py-8 space-y-8">
         {/* 정부지원 사업 데이터 로드 */}
         <motion.div
           className="md:grid md:grid-cols-2 gap-4"
