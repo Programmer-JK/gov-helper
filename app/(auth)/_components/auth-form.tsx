@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import SignInForm from "./signin-form";
-import SignUpForm from "./signup-form";
+// import SignUpForm from "./signup-form";
+import MultiStepSignUpForm from "./multi-step-signup-form";
 
 export default function AuthForm() {
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
@@ -124,10 +125,10 @@ export default function AuthForm() {
                     }}
                   />
                 ) : (
-                  <SignUpForm
-                    checkHeight={() => {
+                  <MultiStepSignUpForm 
+                    onHeightChange={() => {
                       setFormHeight(formRef.current?.scrollHeight || 0);
-                    }}
+                    }} 
                   />
                 )}
               </AnimatePresence>

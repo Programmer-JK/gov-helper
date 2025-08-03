@@ -39,3 +39,18 @@ export interface SignUpFormData {
   password: string;
   confirmPassword: string;
 }
+
+export interface MatchingResult {
+  id: string;
+  programName: string;
+  company: string;
+  department: string;
+  budget: string;
+  matchingRate: number;
+  reasons: string[];
+  requirements: string[];
+}
+export interface Program {
+  id: string;
+  programName: string;
+}

@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     const response = await fetch(
-      `https://api.odcloud.kr/api/nts-businessman/v1/status?serviceKey=${apiKey}`,
+      `https://api.odcloud.kr/api/nts-businessman/v1/validate?serviceKey=${apiKey}`,
       {
         method: "POST",
         headers: {
